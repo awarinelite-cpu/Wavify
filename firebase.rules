@@ -1,0 +1,25 @@
+// ── Firestore Rules ── firestore.rules
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /tracks/{trackId} {
+      // Anyone can read tracks
+      allow read: if true;
+      // Only authenticated users (admins) can write
+      allow write: if request.auth != null;
+    }
+  }
+}
+
+// ── Storage Rules ── storage.rules
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /tracks/{fileName} {
+      // Anyone can read (stream) audio files
+      allow read: if true;
+      // Only authenticated users (admins) can upload/delete
+      allow write: if request.auth != null;
+    }
+  }
+}
